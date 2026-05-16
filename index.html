@@ -31,6 +31,38 @@
         </div>
       </section>
 
+      <section class="panel notice-panel" aria-labelledby="noticeTitle">
+        <div class="section-title">
+          <div>
+            <span class="eyebrow">📒 알림장 쓰기</span>
+            <h2 id="noticeTitle">오늘 알림장을 직접 남겨요</h2>
+          </div>
+          <span class="pill" id="noticeCount">0개 기록</span>
+        </div>
+        <form class="notice-form" id="noticeForm">
+          <label>
+            <span>과목</span>
+            <input id="subjectInput" name="subject" type="text" placeholder="예: 수학" required />
+          </label>
+          <label>
+            <span>숙제/공지</span>
+            <input id="messageInput" name="message" type="text" placeholder="예: 익힘책 24쪽 풀기" required />
+          </label>
+          <label>
+            <span>준비물</span>
+            <input id="supplyInput" name="supply" type="text" placeholder="예: 색연필, 풀" />
+          </label>
+          <button type="submit">알림장 저장 +10코인</button>
+        </form>
+        <div class="notice-list" id="noticeList" aria-live="polite">
+          <article class="notice-card">
+            <strong>국어</strong>
+            <p>받아쓰기 5번 연습하기</p>
+            <small>준비물: 알림장 확인 사인</small>
+          </article>
+        </div>
+      </section>
+
       <section class="content-grid">
         <div class="panel">
           <div class="section-title">

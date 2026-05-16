@@ -16,6 +16,9 @@ const state = {
   coins: 95,
   level: 3,
   items: new Set(['snack']),
+  notices: [
+    { id: 1, subject: '국어', message: '받아쓰기 5번 연습하기', supply: '알림장 확인 사인' },
+  ],
 };
 
 const elements = {
@@ -27,6 +30,9 @@ const elements = {
   missionList: document.querySelector('#missionList'),
   shopList: document.querySelector('#shopList'),
   avatar: document.querySelector('#avatar'),
+  noticeForm: document.querySelector('#noticeForm'),
+  noticeList: document.querySelector('#noticeList'),
+  noticeCount: document.querySelector('#noticeCount'),
 };
 
 function progress() {
@@ -50,6 +56,20 @@ function buyItem(item) {
   if (state.items.has(item.id) || state.coins < item.price) return;
   state.items.add(item.id);
   state.coins -= item.price;
+  render();
+}
+
+function addNotice(formData) {
+  const notice = {
+    id: Date.now(),
+    subject: formData.get('subject').trim(),
+    message: formData.get('message').trim(),
+    supply: formData.get('supply').trim(),
+  };
+
+  if (!notice.subject || !notice.message) return;
+  state.notices.unshift(notice);
+  state.coins += 10;
   render();
 }
 
@@ -89,6 +109,23 @@ function renderShop() {
   }));
 }
 
+function renderNotices() {
+  elements.noticeCount.textContent = `${state.notices.length}개 기록`;
+  elements.noticeList.replaceChildren(...state.notices.map((notice) => {
+    const article = document.createElement('article');
+    const subject = document.createElement('strong');
+    const message = document.createElement('p');
+    const supply = document.createElement('small');
+
+    article.className = 'notice-card';
+    subject.textContent = notice.subject;
+    message.textContent = notice.message;
+    supply.textContent = notice.supply ? `준비물: ${notice.supply}` : '준비물 없음';
+    article.append(subject, message, supply);
+    return article;
+  }));
+}
+
 function renderAvatar() {
   const face = elements.avatar.querySelector('.face');
   elements.avatar.replaceChildren(face);
@@ -111,7 +148,15 @@ function render() {
   elements.xpFill.style.width = `${completion}%`;
   renderMissions();
   renderShop();
+  renderNotices();
   renderAvatar();
 }
+
+elements.noticeForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  addNotice(new FormData(elements.noticeForm));
+  elements.noticeForm.reset();
+  elements.noticeForm.querySelector('input').focus();
+});
 
 render();
